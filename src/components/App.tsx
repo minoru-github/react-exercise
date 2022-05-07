@@ -1,6 +1,7 @@
 import { ChangeEvent, useState, FC, useCallback } from "react";
 import styled from "styled-components";
 import { MemoList } from "./MemoList";
+import { SegmentTree } from "./SegmentTree";
 
 export const App: FC = () => {
     const [text, setText] = useState<string>("");
@@ -29,6 +30,7 @@ export const App: FC = () => {
             <input type="text" value={text} onChange={onChangeText} />
             <SButton onClick={onClickAdd}>add</SButton>
             <MemoList memos={memos} onClickDelete={onClickDelete} />
+            <SegmentTree />
         </div>
     )
 };
