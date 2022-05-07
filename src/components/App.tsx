@@ -30,7 +30,7 @@ export const App: FC = () => {
             <input type="text" value={text} onChange={onChangeText} />
             <SButton onClick={onClickAdd}>add</SButton>
             <MemoList memos={memos} onClickDelete={onClickDelete} />
-            <SegmentTree />
+            <SegmentTree n={4}/>
         </div>
     )
 };

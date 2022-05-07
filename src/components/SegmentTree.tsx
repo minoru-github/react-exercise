@@ -1,8 +1,20 @@
 import { FC } from "react";
 import styled from "styled-components";
 
-export const SegmentTree = () => {
-    const n = 4;
+type Props = {
+    n: number;
+};
+
+export const SegmentTree: FC<Props> = props => {
+    const { n } = props;
+    const all_node = 2 * n - 1;
+    var depth = 0;
+    let temp_n = n;
+    while (temp_n > 1){
+        depth += 1;
+        temp_n /= 2;
+    }
+
     return (
         <div>
             <p>セグメントツリーの可視化</p>
