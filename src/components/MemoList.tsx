@@ -33,7 +33,7 @@ const SButton = styled.button`
 `;
 
 const SContainer = styled.div`
-    boder: solid 1px #ccc;
+    border: solid 1px;
     padding: 16px;
     margin: 8px;
 `;
