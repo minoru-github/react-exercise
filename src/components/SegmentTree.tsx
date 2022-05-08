@@ -5,7 +5,14 @@ type Props = {
     n: number;
 };
 
+
+
 export const SegmentTree: FC<Props> = props => {
+    type Layer = {
+        dist: number;
+        elems: number[];
+    };
+
     const { n } = props;
     const all_node = 2 * n - 1;
     var depth = 0;
@@ -15,25 +22,39 @@ export const SegmentTree: FC<Props> = props => {
         temp_n /= 2;
     }
 
+    console.log(depth);
+    var layers: Array<Layer> = new Array(depth);
+    var elem_num = 1;
+    var index = 0;
+    for (var dist = 0; dist <= depth; dist++) {
+        const elems: number[] = new Array(elem_num);
+        for (var i = 0; i < elem_num; i++){
+            elems[i] = index;
+            index++;
+        }
+        layers[dist] = { dist, elems };
+        elem_num *= 2;
+        console.log(layers[dist]);
+    }
+
     return (
         <div>
             <p>セグメントツリーの可視化</p>
             <STable>
-                <tr>
-                    <STd colSpan={n}>
-                        1
-                    </STd>
-                </tr>
-                <tr>
-                    <STd colSpan={n / 2}>2</STd>
-                    <STd colSpan={n / 2}>3</STd>
-                </tr>
-                <tr>
-                    <STd colSpan={n / 4}>4</STd>
-                    <STd colSpan={n / 4}>5</STd>
-                    <STd colSpan={n / 4}>6</STd>
-                    <STd colSpan={n / 4}>7</STd>
-                </tr>
+                {
+                    layers.map((layer) => (
+                        <tr>
+                            {
+                                layer.elems.map((elem) => (
+                                    <STd colSpan={n / layer.elems.length}>
+                                        {elem}
+                                    </STd>
+                                )) 
+                            }
+
+                        </tr>
+                    ))
+                }
             </STable>
         </div>
     )
