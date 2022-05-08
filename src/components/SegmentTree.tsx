@@ -16,7 +16,12 @@ export const SegmentTree: FC<Props> = props => {
     const { n } = props;
     const all_node = 2 * n - 1;
     var depth = 0;
-    let temp_n = n;
+    var adjusted_n = 1;
+    // 最下層を2のべき乗にする
+    while (n > adjusted_n) {
+        adjusted_n *= 2;
+    }
+    let temp_n = adjusted_n;
     while (temp_n > 1){
         depth += 1;
         temp_n /= 2;
@@ -39,19 +44,17 @@ export const SegmentTree: FC<Props> = props => {
 
     return (
         <div>
-            <p>セグメントツリーの可視化</p>
             <STable>
                 {
                     layers.map((layer) => (
-                        <tr>
+                        <tr key={layer.dist}>
                             {
                                 layer.elems.map((elem) => (
-                                    <STd colSpan={n / layer.elems.length}>
+                                    <STd key={elem} colSpan={adjusted_n / layer.elems.length}>
                                         {elem}
                                     </STd>
                                 )) 
                             }
-
                         </tr>
                     ))
                 }

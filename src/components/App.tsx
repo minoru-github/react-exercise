@@ -29,12 +29,15 @@ export const App: FC = () => {
 
     return (
         <div>
-            <h1>easy memo</h1>
-            <input type="text" value={text} onChange={onChangeText} />
+            <h1>React練習</h1>
+            <SP>セグメントツリーの可視化</SP>
+            <SInput type="text" value={segmNum} onChange={onChangeSegmNum} />
+            <SegmentTree n={Number(segmNum)} />
+            
+            <SP>easy memo</SP>
+            <SInput type="text" value={text} onChange={onChangeText} />
             <SButton onClick={onClickAdd}>add</SButton>
             <MemoList memos={memos} onClickDelete={onClickDelete} />
-            <input type="text" value={segmNum} onChange={onChangeSegmNum} />
-            <SegmentTree n={Number(segmNum)}/>
         </div>
     )
 };
@@ -43,3 +46,11 @@ const SButton = styled.button`
     margin-left: 16px;
 `;
 
+const SP = styled.p`
+    margin-top: 48px;
+    margin-left: 16px;
+`
+
+const SInput = styled.input`
+    margin-left: 16px;
+`
