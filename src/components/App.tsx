@@ -1,7 +1,7 @@
 import { ChangeEvent, useState, FC, useCallback } from "react";
 import styled from "styled-components";
 import { MemoList } from "./MemoList";
-import { SegmentTree } from "./SegmentTree";
+import { SegmentTreeViewer } from "./SegmentTree";
 
 export const App: FC = () => {
     const [text, setText] = useState<string>("");
@@ -32,7 +32,7 @@ export const App: FC = () => {
             <h1>React練習</h1>
             <SP>セグメントツリーの可視化</SP>
             <SInput type="text" value={segmNum} onChange={onChangeSegmNum} />
-            <SegmentTree n={Number(segmNum)} />
+            <SegmentTreeViewer n={Number(segmNum)} />
             
             <SP>easy memo</SP>
             <SInput type="text" value={text} onChange={onChangeText} />
