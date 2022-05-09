@@ -2,7 +2,7 @@ import { FC } from "react";
 import styled from "styled-components";
 
 type Props = {
-    n: number;
+    data: number[];
 };
 
 class SegmentTree {
@@ -109,12 +109,12 @@ export const SegmentTreeViewer: FC<Props> = props => {
         elems: number[];
     };
 
-    const { n } = props;
+    const { data } = props;
+    const n = data.length;
     const segm = new SegmentTree(n);
     const adjustedN = segm.getAdjustedN();
     const depth = segm.getDepth();
-    segm.set(1, 1);
-    segm.set(2, 2);
+    data.map((a, index) => { segm.set(index, a) });
 
     var layers: Array<Layer> = new Array(depth);
     var elem_num = 1;
@@ -139,7 +139,7 @@ export const SegmentTreeViewer: FC<Props> = props => {
                             {
                                 layer.elems.map((elem) => (
                                     <STd key={elem} colSpan={adjustedN / layer.elems.length}>
-                                        {elem} , {segm.getNodeValue(elem)}
+                                        {segm.getNodeValue(elem)}
                                     </STd>
                                 )) 
                             }
@@ -152,7 +152,8 @@ export const SegmentTreeViewer: FC<Props> = props => {
 }
 
 const STable = styled.table`
-    margin: 8px;
+    margin-top: 4px;
+    margin-left: 32px;
     padding:2px;
     width:512px;
     border: solid 1px;
