@@ -58,6 +58,10 @@ class SegmentTree {
         return this.data[node_idx];
     }
 
+    public getNodeValue(nodeIdx: number): number{
+        return this.data[nodeIdx];        
+    }
+
     public query(left: number, right: number): number {
         console.assert(left < this.queryEnd);
         console.assert(right < this.queryEnd);
@@ -130,7 +134,7 @@ export const SegmentTreeViewer: FC<Props> = props => {
                             {
                                 layer.elems.map((elem) => (
                                     <STd key={elem} colSpan={adjustedN / layer.elems.length}>
-                                        {elem}
+                                        {elem} , {segm.getNodeValue(elem)}
                                     </STd>
                                 )) 
                             }
