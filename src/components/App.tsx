@@ -1,7 +1,7 @@
 import { ChangeEvent, useState, FC, useCallback } from "react";
 import styled from "styled-components";
 //import { MemoList } from "./MemoList";
-import { SegmentTreeViewer } from "./SegmentTree";
+import { SegmentTreeViewer } from "./SegmentTreeViewer";
 
 export const App: FC = () => {
     const [text, setText] = useState<string>("");
