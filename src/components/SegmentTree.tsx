@@ -40,15 +40,18 @@ class SegmentTree {
     }
 
     public set(idx: number, a: number) {
+        console.assert(0 <= idx && idx < this.queryEnd, "out of range");
         var nodeIdx = idx + this.adjustedN - 1;
         this.data[nodeIdx] = a;
 
         while (nodeIdx > 0) {
             nodeIdx = (nodeIdx - 1) / 2;
+            nodeIdx = Math.floor(nodeIdx);
             const child1 = this.data[2 * nodeIdx + 1];
             const child2 = this.data[2 * nodeIdx + 2];
             
             this.data[nodeIdx] = this.op(child1, child2);
+            console.log(nodeIdx);
         }
     }
 
@@ -83,7 +86,8 @@ class SegmentTree {
         } else {
             const childIdx1 = 2 * nodeIdx + 1;
             const childIdx2 = 2 * nodeIdx + 2;
-            const mid = (segBegin + segEnd) / 2;
+            const mid_float = (segBegin + segEnd) / 2;
+            const mid = Math.floor(mid_float);
             const child1 = this.subQuery(left, right, childIdx1, segBegin, mid);
             const child2 = this.subQuery(left, right, childIdx2, mid, segEnd);
             return this.op(child1, child2);
@@ -106,11 +110,12 @@ export const SegmentTreeViewer: FC<Props> = props => {
     };
 
     const { n } = props;
-    var segm = new SegmentTree(n);
+    const segm = new SegmentTree(n);
     const adjustedN = segm.getAdjustedN();
     const depth = segm.getDepth();
+    segm.set(1, 1);
+    segm.set(2, 2);
 
-    console.log(depth);
     var layers: Array<Layer> = new Array(depth);
     var elem_num = 1;
     var index = 0;
@@ -122,7 +127,7 @@ export const SegmentTreeViewer: FC<Props> = props => {
         }
         layers[dist] = { dist, elems };
         elem_num *= 2;
-        console.log(layers[dist]);
+        //console.log(layers[dist]);
     }
 
     return (
