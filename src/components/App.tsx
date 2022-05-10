@@ -9,6 +9,7 @@ export const App: FC = () => {
     const [updateIndex, setUpdateIndex] = useState<string>("0");
     const [updateValue, setUpdateValue] = useState<string>("0");
     const [segmArray, setSegmArray] = useState<string>("1 6 2 4");
+    var [data, setData] = useState<number[]>([]);
 
     //const onChangeText = (e: ChangeEvent<HTMLInputElement>) => setText(e.target.value);
 
@@ -30,6 +31,15 @@ export const App: FC = () => {
     const onChangeSegmArray = (e: ChangeEvent<HTMLInputElement>) => setSegmArray(e.target.value);
     const onChangeUpdateIndex = (e: ChangeEvent<HTMLInputElement>) => setUpdateIndex(e.target.value);
     const onChangeUpdateValue = (e: ChangeEvent<HTMLInputElement>) => setUpdateValue(e.target.value);
+    const update = () => {
+        data = segmArray.split(" ").map(Number);
+        data[Number(updateIndex)] = Number(updateValue);
+        setData(data);
+    }
+    const initialize = () => {
+        data = segmArray.split(" ").map(Number);
+        setData(data);
+    }
 
     return (
         <div>
@@ -38,25 +48,27 @@ export const App: FC = () => {
                 <SH4>セグメントツリーの可視化</SH4>
                 <SP>配列の要素を" "区切りで入力</SP>
                 <SInputArray type="text" value={segmArray} onChange={onChangeSegmArray} />
-                
+                <br />
+                <SButton onClick={initialize}>Initilize</SButton>
                 <SDivSet>
                     <SDivIndex>
                         <label>index</label>
                         <br />
-                        <SInputIndex></SInputIndex>
+                        <SInputIndex type="text" value={updateIndex} onChange={onChangeUpdateIndex} />
                     </SDivIndex>
 
                     <SDivValue>
                         <label>value</label>
                         <br />
-                        <SInputIndex></SInputIndex>
+                        <SInputIndex type="text" value={updateValue} onChange={onChangeUpdateValue} />
+
                     </SDivValue>
                     <br />
-                    <SButton>Update</SButton>
+                    <SButton onClick={update}>Update</SButton>
                 </SDivSet>
 
                 <SP>モード：加算</SP>
-                <SegmentTreeViewer data={segmArray.split(" ").map(Number)} />
+                <SegmentTreeViewer data={data} />
             </SSegmViewer>
             
             {/* <SP>easy memo</SP>

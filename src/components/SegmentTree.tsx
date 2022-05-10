@@ -44,7 +44,7 @@ export class SegmentTree {
             const child2 = this.data[2 * nodeIdx + 2];
             
             this.data[nodeIdx] = this.op(child1, child2);
-            console.log(nodeIdx);
+            //console.log(nodeIdx);
         }
     }
 
