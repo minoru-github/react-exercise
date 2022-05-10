@@ -59,7 +59,6 @@ export const SegmentTreeViewer: FC<Props> = props => {
 
 const STable = styled.table`
     margin-top: 4px;
-    margin-left: 32px;
     padding:2px;
     width:512px;
     border: solid 1px;
