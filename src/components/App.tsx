@@ -1,17 +1,23 @@
-import { ChangeEvent, useState, FC, useCallback } from "react";
+import { ChangeEvent, useState, FC} from "react";
 import styled from "styled-components";
+import { SegmentTree } from "./SegmentTree";
 //import { MemoList } from "./MemoList";
 import { SegmentTreeViewer } from "./SegmentTreeViewer";
 
-export const App: FC = () => {
-    // const [text, setText] = useState<string>("");
-    // const [memos, setMemos] = useState<string[]>([]);
-    const [updateIndex, setUpdateIndex] = useState<string>("0");
-    const [updateValue, setUpdateValue] = useState<string>("0");
-    const [segmArray, setSegmArray] = useState<string>("1 6 2 4");
-    var [data, setData] = useState<number[]>([]);
+// TODO: この辺のグローバル変数を直で書いてるのが気持ち悪い・・・どっかに分離したい。
+const initialDataString = "1 6 2 4";
+const initialData = initialDataString.split(" ").map(Number);
+var segm = new SegmentTree(initialData.length);
+initialData.map((value, index) => segm.set(index, value));
 
-    //const onChangeText = (e: ChangeEvent<HTMLInputElement>) => setText(e.target.value);
+export const App: FC = () => {
+    const [updateIndex, setUpdateIndex] = useState<string>("0");
+    const [updateValue, setUpdateValue] = useState<string>("5");
+    const [segmArray, setSegmArray] = useState<string>("1 6 2 4");
+    // SegmentTreeViewerの再レンダリング対象としてSegmentTreeクラスをuseStateの対象にしても
+    // オブジェクトそのものの変更は検知するが、プライベート変数の変更は検知してくれないので
+    // 暫定？でcounterで変更を検知させる
+    const [counter, setCounter] = useState<number>(0);
 
     // const onClickAdd = () => {
     //     const newMemos = [...memos];
@@ -31,14 +37,24 @@ export const App: FC = () => {
     const onChangeSegmArray = (e: ChangeEvent<HTMLInputElement>) => setSegmArray(e.target.value);
     const onChangeUpdateIndex = (e: ChangeEvent<HTMLInputElement>) => setUpdateIndex(e.target.value);
     const onChangeUpdateValue = (e: ChangeEvent<HTMLInputElement>) => setUpdateValue(e.target.value);
-    const update = () => {
-        data = segmArray.split(" ").map(Number);
-        data[Number(updateIndex)] = Number(updateValue);
-        setData(data);
-    }
+
+    // セグ木の初期化
     const initialize = () => {
-        data = segmArray.split(" ").map(Number);
-        setData(data);
+        const data = segmArray.split(" ").map(Number);
+        segm = new SegmentTree(data.length);
+        data.forEach((value, index) => segm.set(index, value));
+
+        setCounter(counter + 1);
+    }
+
+    // セグ木の更新(set)
+    const update = () => {
+        // TODO: indexの範囲外アクセスの検知assert仕込み
+        const index = Number(updateIndex);
+        const value = Number(updateValue);
+        segm.set(index, value);
+
+        setCounter(counter + 1);
     }
 
     return (
@@ -51,30 +67,23 @@ export const App: FC = () => {
                 <br />
                 <SButton onClick={initialize}>Initilize</SButton>
                 <SDivSet>
-                    <SDivIndex>
+                    <SDivUpdate>
                         <label>index</label>
                         <br />
-                        <SInputIndex type="text" value={updateIndex} onChange={onChangeUpdateIndex} />
-                    </SDivIndex>
+                        <SInputUpdate type="text" value={updateIndex} onChange={onChangeUpdateIndex} />
+                    </SDivUpdate>
 
-                    <SDivValue>
+                    <SDivUpdate>
                         <label>value</label>
                         <br />
-                        <SInputIndex type="text" value={updateValue} onChange={onChangeUpdateValue} />
-
-                    </SDivValue>
+                        <SInputUpdate type="text" value={updateValue} onChange={onChangeUpdateValue} />
+                    </SDivUpdate>
                     <br />
                     <SButton onClick={update}>Update</SButton>
                 </SDivSet>
-
                 <SP>モード：加算</SP>
-                <SegmentTreeViewer data={data} />
+                <SegmentTreeViewer counter={counter} segm={segm} />
             </SSegmViewer>
-            
-            {/* <SP>easy memo</SP>
-            <SInput type="text" value={text} onChange={onChangeText} />
-            <SButton onClick={onClickAdd}>add</SButton>
-            <MemoList memos={memos} onClickDelete={onClickDelete} /> */}
         </div>
     )
 };
@@ -124,16 +133,12 @@ const SDivSet = styled.div`
     padding: 4px;
 `
 
-const SDivIndex = styled.div`
-    float:left;
-`
-const SDivValue = styled.div`
+const SDivUpdate = styled.div`
     float:left;
 `
 
-const SInputIndex = styled.input`
+const SInputUpdate = styled.input`
     margin-right: 4px;
     width: 100px;
     text-align:center;
 `
-

@@ -32,10 +32,10 @@ export class SegmentTree {
         return 0;
     }
 
-    public set(idx: number, a: number) {
-        console.assert(0 <= idx && idx < this.queryEnd, "out of range");
-        var nodeIdx = idx + this.adjustedN - 1;
-        this.data[nodeIdx] = a;
+    public set(index: number, value: number) {
+        console.assert(0 <= index && index < this.queryEnd, "out of range");
+        var nodeIdx = index + this.adjustedN - 1;
+        this.data[nodeIdx] = value;
 
         while (nodeIdx > 0) {
             nodeIdx = (nodeIdx - 1) / 2;
@@ -49,9 +49,9 @@ export class SegmentTree {
     }
 
     // 元の配列(最下層レイヤー)の値を取得
-    public get(idx: number): number {
-        console.assert(0 <= idx && idx < this.queryEnd, "out of range");
-        const node_idx = idx + this.adjustedN - 1;
+    public get(index: number): number {
+        console.assert(0 <= index && index < this.queryEnd, "out of range");
+        const node_idx = index + this.adjustedN - 1;
         return this.data[node_idx];
     }
 

@@ -1,25 +1,24 @@
+import { assert } from "console";
 import { FC } from "react";
 import styled from "styled-components";
 import { SegmentTree } from "./SegmentTree";
 
 type Props = {
-    data: number[];
-};
+    counter: number;
+    segm: SegmentTree;
+}
 
 export const SegmentTreeViewer: FC<Props> = props => {
+    const { segm } = props;
     type Layer = {
         dist: number;
         elems: number[];
     };
 
-    const { data } = props;
-    const n = data.length;
+    console.assert(segm != null, "セグ木が空");
 
-    // セグ木構築
-    const segm = new SegmentTree(n);
     const adjustedN = segm.getAdjustedN();
     const depth = segm.getDepth();
-    data.map((a, index) => { segm.set(index, a) });
 
     // 描画用に各レイヤーの深さごとにindex配列を用意
     var layers: Array<Layer> = new Array(depth);
@@ -33,7 +32,6 @@ export const SegmentTreeViewer: FC<Props> = props => {
         }
         layers[dist] = { dist, elems };
         elem_num *= 2;
-        //console.log(layers[dist]);
     }
 
     return (
@@ -44,7 +42,7 @@ export const SegmentTreeViewer: FC<Props> = props => {
                         <tr key={layer.dist}>
                             {
                                 layer.elems.map((elem) => (
-                                    <STd key={elem} colSpan={adjustedN / layer.elems.length}>
+                                    <STd key={elem} colSpan={Number(adjustedN / layer.elems.length)}>
                                         {segm.getNodeValue(elem)}
                                     </STd>
                                 )) 
