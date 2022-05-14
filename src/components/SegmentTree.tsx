@@ -79,6 +79,10 @@ export class SegmentTree {
         console.assert(left < this.queryEnd);
         console.assert(right < this.queryEnd);
         console.assert(left < right);
+
+        // Viewer用
+        this.updatedNodeIndexes.clear();
+
         return this.subQuery(left,right,0,0,this.adjustedN);
     }
 
@@ -92,6 +96,9 @@ export class SegmentTree {
         if (segEnd <= left || right <= segBegin) {
             return this.e();
         } else if (left <= segBegin && segEnd <= right) {
+            // Viewer用
+            this.updatedNodeIndexes.add(nodeIdx);
+
             return this.data[nodeIdx];
         } else {
             const childIdx1 = 2 * nodeIdx + 1;

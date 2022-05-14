@@ -4,13 +4,17 @@ import { SegmentTree } from "./SegmentTree";
 //import { MemoList } from "./MemoList";
 import { SegmentTreeViewer } from "./SegmentTreeViewer";
 
-const initialDataString = "1 6 2 4";
+const initialDataString = "1 6 2 4 3 3 2 1";
 var segm = SegmentTree.initilize(initialDataString);
 
 export const App: FC = () => {
+    const [segmArray, setSegmArray] = useState<string>(initialDataString);
     const [updateIndex, setUpdateIndex] = useState<string>("0");
     const [updateValue, setUpdateValue] = useState<string>("5");
-    const [segmArray, setSegmArray] = useState<string>(initialDataString);
+    const [indexOfBegin, setIndexOfBegin] = useState<number>(1);
+    const [indexOfEnd, setIndexOfEnd] = useState<number>(8);
+    const [resultOfQuery, setResultOfQuery] = useState<number>(99);
+
     // SegmentTreeViewerの再レンダリング対象としてSegmentTreeクラスをuseStateの対象にしても
     // オブジェクトそのものの変更は検知するが、プライベート変数の変更は検知してくれないので
     // 暫定？でcounterで変更を検知させる
@@ -34,6 +38,8 @@ export const App: FC = () => {
     const onChangeSegmArray = (e: ChangeEvent<HTMLInputElement>) => setSegmArray(e.target.value);
     const onChangeUpdateIndex = (e: ChangeEvent<HTMLInputElement>) => setUpdateIndex(e.target.value);
     const onChangeUpdateValue = (e: ChangeEvent<HTMLInputElement>) => setUpdateValue(e.target.value);
+    const onChangeIndexOfBegin = (e: ChangeEvent<HTMLInputElement>) => setIndexOfBegin(Number(e.target.value));
+    const onChangeIndexOfEnd = (e: ChangeEvent<HTMLInputElement>) => setIndexOfEnd(Number(e.target.value));
 
     // セグ木の初期化
     const initialize = () => {
@@ -52,6 +58,12 @@ export const App: FC = () => {
         setCounter(counter + 1);
     }
 
+    // セグ木のクエリ処理(query)
+    const query = () => {
+        const result = segm.query(indexOfBegin, indexOfEnd);
+        setResultOfQuery(result);
+    }
+
     return (
         <div>
             <SH1>React練習</SH1>
@@ -61,6 +73,7 @@ export const App: FC = () => {
                 <SInputArray type="text" value={segmArray} onChange={onChangeSegmArray} />
                 <br />
                 <SButton onClick={initialize}>Initilize</SButton>
+
                 <SDivSet>
                     <SDivUpdate>
                         <label>index</label>
@@ -76,6 +89,24 @@ export const App: FC = () => {
                     <br />
                     <SButton onClick={update}>Update</SButton>
                 </SDivSet>
+
+                <SDivQuery>
+                    <SDivUpdate>
+                        <label>begin</label>
+                        <br />
+                        <SInputUpdate type="text" value={indexOfBegin} onChange={onChangeIndexOfBegin} />
+                    </SDivUpdate>
+
+                    <SDivUpdate>
+                        <label>end</label>
+                        <br />
+                        <SInputUpdate type="text" value={indexOfEnd} onChange={onChangeIndexOfEnd} />
+                    </SDivUpdate>
+                    <br />
+                    <SButton onClick={query}>Query</SButton>
+                    <SLabelQueryResult>result = {resultOfQuery}</SLabelQueryResult>
+                </SDivQuery>
+
                 <SP>モード：加算</SP>
                 <SegmentTreeViewer counter={counter} segm={segm} />
             </SSegmViewer>
@@ -136,4 +167,20 @@ const SInputUpdate = styled.input`
     margin-right: 4px;
     width: 100px;
     text-align:center;
+`
+
+const SDivQuery = styled.div`
+    overflow:hidden;
+    width: 500px;
+    background: rgb(0,0,0,0.1);
+    padding: 4px;
+`
+
+const SLabelQueryResult = styled.label`
+    margin-left: 12px;
+    padding-left: 12px;
+    padding-right: 12px;
+
+    text-align:center;
+    background-color: #7fffd4;
 `
