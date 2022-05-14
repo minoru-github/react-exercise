@@ -3,6 +3,7 @@ export class SegmentTree {
     private depth: number;
     private queryEnd: number;
     private data: number[];
+    private updatedNodeIndexes: Set<number>;  // Viewer用
     
     constructor(n: number) {
         var adjustedN = 1;
@@ -20,6 +21,10 @@ export class SegmentTree {
         for (var i = 0; i < this.data.length; i++) {
             this.data[i] = this.e();
         }
+
+        // Viewer用
+        this.updatedNodeIndexes = new Set<number>();
+        this.updatedNodeIndexes.clear();
     }
 
     // TODO interface化？ストラテジーパターン？
@@ -33,18 +38,28 @@ export class SegmentTree {
     }
 
     public set(index: number, value: number) {
+        
         console.assert(0 <= index && index < this.queryEnd, "out of range");
         var nodeIdx = index + this.adjustedN - 1;
         this.data[nodeIdx] = value;
 
+        // Viewer用
+        this.updatedNodeIndexes.clear();
+        this.updatedNodeIndexes.add(nodeIdx);
+
         while (nodeIdx > 0) {
             nodeIdx = (nodeIdx - 1) / 2;
             nodeIdx = Math.floor(nodeIdx);
-            const child1 = this.data[2 * nodeIdx + 1];
-            const child2 = this.data[2 * nodeIdx + 2];
+            const childIdx1 = 2 * nodeIdx + 1;
+            const childIdx2 = 2 * nodeIdx + 2;
+
+            const child1 = this.data[childIdx1];
+            const child2 = this.data[childIdx2];
             
             this.data[nodeIdx] = this.op(child1, child2);
-            //console.log(nodeIdx);
+
+            // Viewer用
+            this.updatedNodeIndexes.add(nodeIdx);
         }
     }
 
@@ -97,5 +112,15 @@ export class SegmentTree {
     // Viewer用
     public getDepth(): number {
         return this.depth;
+    }
+
+    // Viewer用
+    public getUpdatedNodeIndexes() {
+        return this.updatedNodeIndexes;
+    }
+
+    // Viewer用
+    public clearUpdatedNodeIndexes() {
+        this.updatedNodeIndexes.clear();
     }
 }

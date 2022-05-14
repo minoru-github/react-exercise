@@ -8,7 +8,8 @@ import { SegmentTreeViewer } from "./SegmentTreeViewer";
 const initialDataString = "1 6 2 4";
 const initialData = initialDataString.split(" ").map(Number);
 var segm = new SegmentTree(initialData.length);
-initialData.map((value, index) => segm.set(index, value));
+initialData.forEach((value, index) => segm.set(index, value));
+segm.clearUpdatedNodeIndexes();
 
 export const App: FC = () => {
     const [updateIndex, setUpdateIndex] = useState<string>("0");
@@ -43,6 +44,7 @@ export const App: FC = () => {
         const data = segmArray.split(" ").map(Number);
         segm = new SegmentTree(data.length);
         data.forEach((value, index) => segm.set(index, value));
+        segm.clearUpdatedNodeIndexes();
 
         setCounter(counter + 1);
     }

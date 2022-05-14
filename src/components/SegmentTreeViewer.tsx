@@ -3,6 +3,31 @@ import { FC } from "react";
 import styled from "styled-components";
 import { SegmentTree } from "./SegmentTree";
 
+type TableAttribute = {
+    key: number;
+    colSpan: number;
+    value: number;
+    isHighlighted:boolean;
+}
+
+const DrawTable: FC<TableAttribute> = props => {
+    const { key, colSpan, value, isHighlighted } = props;
+
+    if (isHighlighted) {
+        return (
+            <STdHasSet key={key} colSpan={colSpan}>
+                {value}
+            </STdHasSet>
+        )
+    } else {
+        return (
+            <STd key={key} colSpan={colSpan}>
+                {value}
+            </STd>
+        )
+    }
+}
+
 type Props = {
     counter: number;
     segm: SegmentTree;
@@ -10,27 +35,34 @@ type Props = {
 
 export const SegmentTreeViewer: FC<Props> = props => {
     const { segm } = props;
+    type NodeIndex = {
+        nodeIndex: number;
+        hasUpdated: boolean;
+    }
     type Layer = {
         dist: number;
-        elems: number[];
+        nodeIndexes: NodeIndex[];
     };
 
     console.assert(segm != null, "セグ木が空");
 
     const adjustedN = segm.getAdjustedN();
     const depth = segm.getDepth();
+    const updatedNodeIndexes = segm.getUpdatedNodeIndexes();
 
     // 描画用に各レイヤーの深さごとにindex配列を用意
     var layers: Array<Layer> = new Array(depth);
     var elem_num = 1;
-    var index = 0;
+    var nodeIndex = 0;
     for (var dist = 0; dist <= depth; dist++) {
-        const elems: number[] = new Array(elem_num);
+        const nodeIndexes: NodeIndex[] = new Array(elem_num);
         for (var i = 0; i < elem_num; i++){
-            elems[i] = index;
-            index++;
+            const hasUpdated = updatedNodeIndexes.has(nodeIndex);
+            nodeIndexes[i] = { nodeIndex, hasUpdated};
+
+            nodeIndex++;
         }
-        layers[dist] = { dist, elems };
+        layers[dist] = { dist, nodeIndexes };
         elem_num *= 2;
     }
 
@@ -41,10 +73,12 @@ export const SegmentTreeViewer: FC<Props> = props => {
                     layers.map((layer) => (
                         <tr key={layer.dist}>
                             {
-                                layer.elems.map((elem) => (
-                                    <STd key={elem} colSpan={Number(adjustedN / layer.elems.length)}>
-                                        {segm.getNodeValue(elem)}
-                                    </STd>
+                                layer.nodeIndexes.map((elem) => (
+                                    <DrawTable key={elem.nodeIndex} colSpan={Number(adjustedN / layer.nodeIndexes.length)} value={segm.getNodeValue(elem.nodeIndex)}  isHighlighted={elem.hasUpdated} />
+
+                                    // <STd key={elem.nodeIndex} colSpan={Number(adjustedN / layer.nodeIndexes.length)}>
+                                    //     {segm.getNodeValue(elem.nodeIndex)}
+                                    // </STd>
                                 )) 
                             }
                         </tr>
@@ -67,4 +101,9 @@ const STd = styled.td`
     border: solid 1px;
     text-align: center;
     background-color: #ffffff;
+`
+const STdHasSet = styled.td`
+    border: solid 1px;
+    text-align: center;
+    background-color: #7fffd4;
 `
