@@ -3,14 +3,14 @@ import { FC } from "react";
 import styled from "styled-components";
 import { SegmentTree } from "./SegmentTree";
 
-type TableAttribute = {
+type CellAttribute = {
     key: number;
     colSpan: number;
     value: number;
     isHighlighted:boolean;
 }
 
-const DrawTable: FC<TableAttribute> = props => {
+const DrawCell: FC<CellAttribute> = props => {
     const { key, colSpan, value, isHighlighted } = props;
 
     if (isHighlighted) {
@@ -35,14 +35,16 @@ type Props = {
 
 export const SegmentTreeViewer: FC<Props> = props => {
     const { segm } = props;
+
     type NodeIndex = {
         nodeIndex: number;
         hasUpdated: boolean;
     }
+
     type Layer = {
         dist: number;
         nodeIndexes: NodeIndex[];
-    };
+    }
 
     console.assert(segm != null, "セグ木が空");
 
@@ -74,11 +76,7 @@ export const SegmentTreeViewer: FC<Props> = props => {
                         <tr key={layer.dist}>
                             {
                                 layer.nodeIndexes.map((elem) => (
-                                    <DrawTable key={elem.nodeIndex} colSpan={Number(adjustedN / layer.nodeIndexes.length)} value={segm.getNodeValue(elem.nodeIndex)}  isHighlighted={elem.hasUpdated} />
-
-                                    // <STd key={elem.nodeIndex} colSpan={Number(adjustedN / layer.nodeIndexes.length)}>
-                                    //     {segm.getNodeValue(elem.nodeIndex)}
-                                    // </STd>
+                                    <DrawCell key={elem.nodeIndex} colSpan={Number(adjustedN / layer.nodeIndexes.length)} value={segm.getNodeValue(elem.nodeIndex)}  isHighlighted={elem.hasUpdated} />
                                 )) 
                             }
                         </tr>
