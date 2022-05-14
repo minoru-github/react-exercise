@@ -83,7 +83,7 @@ export class SegmentTree {
         // Viewer用
         this.updatedNodeIndexes.clear();
 
-        return this.subQuery(left,right,0,0,this.adjustedN);
+        return this.subQuery(left, right, 0, 0, this.queryEnd);
     }
 
     private subQuery(
@@ -109,6 +109,11 @@ export class SegmentTree {
             const child2 = this.subQuery(left, right, childIdx2, mid, segEnd);
             return this.op(child1, child2);
         }
+    }
+
+    // Viewer用
+    public getQueryEnd(): number {
+        return this.queryEnd;
     }
 
     // Viewer用
