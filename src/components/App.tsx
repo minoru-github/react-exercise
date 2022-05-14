@@ -50,7 +50,11 @@ export const App: FC = () => {
 
     // セグ木の更新(set)
     const update = () => {
-        // TODO: indexの範囲外アクセスの検知assert仕込み
+        if (updateIndex < 0 || segm.getAdjustedN() <= updateIndex) {
+            alert("indexが範囲外");
+            return;
+        }
+
         segm.set(updateIndex, updateValue);
 
         setResultOfQuery(undefined);
@@ -59,6 +63,21 @@ export const App: FC = () => {
 
     // セグ木のクエリ処理(query)
     const query = () => {
+        if (indexOfBegin < 0 || segm.getAdjustedN() <= indexOfBegin) {
+            alert("0 <= begin < end にしてください");
+            return;
+        }
+
+        if (indexOfEnd < 0 || segm.getAdjustedN() < indexOfEnd) {
+            alert("begin < end <= N にしてください");
+            return;
+        }
+
+        if (indexOfEnd <= indexOfBegin) {
+            alert("begin < end にしてください");
+            return; 
+        }
+
         const result = segm.query(indexOfBegin, indexOfEnd);
         setResultOfQuery(result);
     }
