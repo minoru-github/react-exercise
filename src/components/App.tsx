@@ -4,17 +4,13 @@ import { SegmentTree } from "./SegmentTree";
 //import { MemoList } from "./MemoList";
 import { SegmentTreeViewer } from "./SegmentTreeViewer";
 
-// TODO: この辺のグローバル変数を直で書いてるのが気持ち悪い・・・どっかに分離したい。
 const initialDataString = "1 6 2 4";
-const initialData = initialDataString.split(" ").map(Number);
-var segm = new SegmentTree(initialData.length);
-initialData.forEach((value, index) => segm.set(index, value));
-segm.clearUpdatedNodeIndexes();
+var segm = SegmentTree.initilize(initialDataString);
 
 export const App: FC = () => {
     const [updateIndex, setUpdateIndex] = useState<string>("0");
     const [updateValue, setUpdateValue] = useState<string>("5");
-    const [segmArray, setSegmArray] = useState<string>("1 6 2 4");
+    const [segmArray, setSegmArray] = useState<string>(initialDataString);
     // SegmentTreeViewerの再レンダリング対象としてSegmentTreeクラスをuseStateの対象にしても
     // オブジェクトそのものの変更は検知するが、プライベート変数の変更は検知してくれないので
     // 暫定？でcounterで変更を検知させる
@@ -41,10 +37,7 @@ export const App: FC = () => {
 
     // セグ木の初期化
     const initialize = () => {
-        const data = segmArray.split(" ").map(Number);
-        segm = new SegmentTree(data.length);
-        data.forEach((value, index) => segm.set(index, value));
-        segm.clearUpdatedNodeIndexes();
+        segm = SegmentTree.initilize(segmArray);
 
         setCounter(counter + 1);
     }

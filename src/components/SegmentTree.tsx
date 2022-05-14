@@ -123,4 +123,13 @@ export class SegmentTree {
     public clearUpdatedNodeIndexes() {
         this.updatedNodeIndexes.clear();
     }
+
+    // Viewer用
+    static initilize(initialDataString: string) {
+        const initialData = initialDataString.split(" ").map(Number);
+        var segm = new SegmentTree(initialData.length);
+        initialData.forEach((value, index) => segm.set(index, value));
+        segm.clearUpdatedNodeIndexes();
+        return segm;
+    }
 }
