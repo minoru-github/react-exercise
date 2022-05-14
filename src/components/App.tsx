@@ -9,11 +9,11 @@ var segm = SegmentTree.initilize(initialDataString);
 
 export const App: FC = () => {
     const [segmArray, setSegmArray] = useState<string>(initialDataString);
-    const [updateIndex, setUpdateIndex] = useState<string>("0");
-    const [updateValue, setUpdateValue] = useState<string>("5");
+    const [updateIndex, setUpdateIndex] = useState<number>(0);
+    const [updateValue, setUpdateValue] = useState<number>(5);
     const [indexOfBegin, setIndexOfBegin] = useState<number>(1);
     const [indexOfEnd, setIndexOfEnd] = useState<number>(8);
-    const [resultOfQuery, setResultOfQuery] = useState<number>(99);
+    const [resultOfQuery, setResultOfQuery] = useState<number>();
 
     // SegmentTreeViewerの再レンダリング対象としてSegmentTreeクラスをuseStateの対象にしても
     // オブジェクトそのものの変更は検知するが、プライベート変数の変更は検知してくれないので
@@ -36,8 +36,8 @@ export const App: FC = () => {
     // );
 
     const onChangeSegmArray = (e: ChangeEvent<HTMLInputElement>) => setSegmArray(e.target.value);
-    const onChangeUpdateIndex = (e: ChangeEvent<HTMLInputElement>) => setUpdateIndex(e.target.value);
-    const onChangeUpdateValue = (e: ChangeEvent<HTMLInputElement>) => setUpdateValue(e.target.value);
+    const onChangeUpdateIndex = (e: ChangeEvent<HTMLInputElement>) => setUpdateIndex(Number(e.target.value));
+    const onChangeUpdateValue = (e: ChangeEvent<HTMLInputElement>) => setUpdateValue(Number(e.target.value));
     const onChangeIndexOfBegin = (e: ChangeEvent<HTMLInputElement>) => setIndexOfBegin(Number(e.target.value));
     const onChangeIndexOfEnd = (e: ChangeEvent<HTMLInputElement>) => setIndexOfEnd(Number(e.target.value));
 
@@ -51,10 +51,9 @@ export const App: FC = () => {
     // セグ木の更新(set)
     const update = () => {
         // TODO: indexの範囲外アクセスの検知assert仕込み
-        const index = Number(updateIndex);
-        const value = Number(updateValue);
-        segm.set(index, value);
+        segm.set(updateIndex, updateValue);
 
+        setResultOfQuery(undefined);
         setCounter(counter + 1);
     }
 
