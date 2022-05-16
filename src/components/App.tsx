@@ -8,17 +8,17 @@ const initialDataString = "1 6 2 4 3 3 2 1";
 var segm = SegmentTree.initilize(initialDataString);
 
 export const App: FC = () => {
-    const [segmArray, setSegmArray] = useState<string>(initialDataString);
-    const [updateIndex, setUpdateIndex] = useState<number>(0);
-    const [updateValue, setUpdateValue] = useState<number>(5);
-    const [indexOfBegin, setIndexOfBegin] = useState<number>(1);
-    const [indexOfEnd, setIndexOfEnd] = useState<number>(8);
-    const [resultOfQuery, setResultOfQuery] = useState<number>();
+    const [segmArray, setSegmArray] = useState(initialDataString);
+    const [updateIndex, setUpdateIndex] = useState(0);
+    const [updateValue, setUpdateValue] = useState(5);
+    const [indexOfBegin, setIndexOfBegin] = useState(1);
+    const [indexOfEnd, setIndexOfEnd] = useState(8);
+    const [resultOfQuery, setResultOfQuery] = useState(Number(undefined));
 
     // SegmentTreeViewerの再レンダリング対象としてSegmentTreeクラスをuseStateの対象にしても
     // オブジェクトそのものの変更は検知するが、プライベート変数の変更は検知してくれないので
     // 暫定？でcounterで変更を検知させる
-    const [counter, setCounter] = useState<number>(0);
+    const [counter, setCounter] = useState(0);
 
     // const onClickAdd = () => {
     //     const newMemos = [...memos];
@@ -57,7 +57,7 @@ export const App: FC = () => {
 
         segm.set(updateIndex, updateValue);
 
-        setResultOfQuery(undefined);
+        setResultOfQuery(Number(undefined));
         setCounter(counter + 1);
     }
 
