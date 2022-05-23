@@ -51,7 +51,7 @@ export const App: FC = () => {
     // セグ木の更新(set)
     const update = () => {
         if (updateIndex < 0 || segm.getQueryEnd() <= updateIndex) {
-            alert("0 <= index < N にしてください");
+            alert("0 <= index < N (" + segm.getQueryEnd() + ") にしてください");
             return;
         }
 
@@ -64,12 +64,12 @@ export const App: FC = () => {
     // セグ木のクエリ処理(query)
     const query = () => {
         if (indexOfBegin < 0 || segm.getQueryEnd() <= indexOfBegin) {
-            alert("0 <= begin < end にしてください");
+            alert("0 <= begin < endにしてください");
             return;
         }
 
         if (indexOfEnd < 0 || segm.getQueryEnd() < indexOfEnd) {
-            alert("begin < end <= N にしてください");
+            alert("begin < end <= N (" + segm.getQueryEnd() + ")  にしてください");
             return;
         }
 
