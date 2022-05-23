@@ -83,7 +83,7 @@ export class SegmentTree {
         // Viewer用
         this.updatedNodeIndexes.clear();
 
-        return this.subQuery(left, right, 0, 0, this.queryEnd);
+        return this.subQuery(left, right, 0, 0, this.adjustedN);
     }
 
     private subQuery(
